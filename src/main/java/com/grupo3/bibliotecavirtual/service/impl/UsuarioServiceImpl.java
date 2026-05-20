@@ -1,8 +1,12 @@
 package com.grupo3.bibliotecavirtual.service.impl;
 
+import com.grupo3.bibliotecavirtual.model.entity.Rol;
 import com.grupo3.bibliotecavirtual.model.entity.Usuario;
+import com.grupo3.bibliotecavirtual.repository.RolRepository;
 import com.grupo3.bibliotecavirtual.repository.UsuarioRepository;
+import com.grupo3.bibliotecavirtual.security.RolNames;
 import com.grupo3.bibliotecavirtual.service.UsuarioService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +15,17 @@ import java.util.List;
 public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioRepository repository;
+    private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioServiceImpl(UsuarioRepository repository) {
+    public UsuarioServiceImpl(
+            UsuarioRepository repository,
+            RolRepository rolRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         this.repository = repository;
+        this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -26,6 +38,10 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (repository.existsByEmail(usuario.getEmail())) {
             throw new RuntimeException("Ya existe un usuario con el email: " + usuario.getEmail());
         }
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        if (usuario.getRol() == null) {
+            usuario.setRol(obtenerRolPorDefecto());
+        }
         return repository.save(usuario);
     }
 
@@ -35,7 +51,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
 
         existente.setEmail(usuario.getEmail());
-        existente.setPassword(usuario.getPassword());
+        actualizarPassword(existente, usuario.getPassword());
 
         if (usuario.getPerfil() != null) {
             existente.setPerfil(usuario.getPerfil());
@@ -65,5 +81,25 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario buscarPorEmail(String email) {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + email));
+    }
+
+    private Rol obtenerRolPorDefecto() {
+        return rolRepository.findByDescripcion(RolNames.USUARIO)
+                .orElseThrow(() -> new RuntimeException(
+                        "Rol " + RolNames.USUARIO + " no encontrado. Reinicie la aplicación para inicializar roles."
+                ));
+    }
+
+    private void actualizarPassword(Usuario existente, String password) {
+        if (password == null || password.isBlank()) {
+            return;
+        }
+        if (password.startsWith("$2a$") || password.startsWith("$2b$") || password.startsWith("$2y$")) {
+            existente.setPassword(password);
+            return;
+        }
+        if (!passwordEncoder.matches(password, existente.getPassword())) {
+            existente.setPassword(passwordEncoder.encode(password));
+        }
     }
 }
