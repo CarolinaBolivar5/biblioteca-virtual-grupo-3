@@ -7,6 +7,8 @@ import com.grupo3.bibliotecavirtual.model.entity.Usuario;
 import com.grupo3.bibliotecavirtual.service.PerfilService;
 import com.grupo3.bibliotecavirtual.service.RolService;
 import com.grupo3.bibliotecavirtual.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Tag(name = "Usuarios", description = "Gestión de usuarios")
 @RequestMapping("/usuarios")
-@CrossOrigin(origins = "http://localhost:5173")
 public class UsuarioController {
 
     private final UsuarioService service;
@@ -28,21 +30,25 @@ public class UsuarioController {
         this.perfilService = perfilService;
     }
 
+    @Operation(summary = "Listar Usuarios")
     @GetMapping
     public ResponseEntity<List<Usuario>> listar() {
         return ResponseEntity.ok(service.listar());
     }
 
+    @Operation(summary = "Obtener un usuario por ID")
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
+    @Operation(summary = "Obtener un usuario por Email")
     @GetMapping("/email/{email}")
     public ResponseEntity<Usuario> buscarPorEmail(@PathVariable String email) {
         return ResponseEntity.ok(service.buscarPorEmail(email));
     }
 
+    @Operation(summary = "Crear usuario")
     @PostMapping
     public ResponseEntity<Usuario> guardar(@RequestBody UsuarioDTO dto) {
         Usuario usuario = new Usuario();
@@ -61,6 +67,7 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.guardar(usuario));
     }
 
+    @Operation(summary = "Actualizar usuario por ID")
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizar(@PathVariable Long id, @RequestBody UsuarioDTO dto) {
         Usuario usuario = new Usuario();
@@ -75,6 +82,7 @@ public class UsuarioController {
         return ResponseEntity.ok(service.actualizar(id, usuario));
     }
 
+    @Operation(summary = "Eliminar un usuario por id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         service.eliminar(id);
