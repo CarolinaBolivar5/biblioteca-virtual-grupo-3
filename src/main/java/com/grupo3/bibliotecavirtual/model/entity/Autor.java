@@ -1,5 +1,6 @@
 package com.grupo3.bibliotecavirtual.model.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Schema(description = "POST /autores", example = "{\"nombre\":\"Gabriel García Márquez\"}")
 @Entity
 @Table(name = "autores")
 @Getter
