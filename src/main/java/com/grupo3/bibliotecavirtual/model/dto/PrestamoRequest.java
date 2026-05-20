@@ -1,15 +1,18 @@
 package com.grupo3.bibliotecavirtual.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
-import com.grupo3.bibliotecavirtual.model.entity.Perfil;
-import java.time.LocalDate;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.time.LocalDate;
+
+@Schema(description = "POST /prestamos (libro desde Google Books)", example = """
+        {"libro":{"nombreLibro":"Cien años de soledad","googleId":"abc123","autoresTexto":"G. García Márquez"},"perfilId":1,"fechaDevolucion":"2026-05-20"}
+        """)
 @Getter
 @Setter
 public class PrestamoRequest {
-
     // En lugar de campos individuales, usar objeto Libro completo
     private LibroDTO libro;
 
