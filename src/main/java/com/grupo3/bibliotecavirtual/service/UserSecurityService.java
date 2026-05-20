@@ -32,9 +32,9 @@ public class UserSecurityService implements UserDetailsService {
     }
 
     private String resolverNombreRol(Rol rol) {
-        if (rol == null || rol.getDescripcion() == null || rol.getDescripcion().isBlank()) {
+        if (rol == null || rol.getDescripcion() == null) {
             return RolNames.USUARIO;
         }
-        return rol.getDescripcion().trim().toUpperCase();
+        return rol.getDescripcion().name();
     }
 }

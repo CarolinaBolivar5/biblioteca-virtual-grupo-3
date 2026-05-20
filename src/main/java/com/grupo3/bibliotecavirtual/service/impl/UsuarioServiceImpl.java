@@ -2,9 +2,9 @@ package com.grupo3.bibliotecavirtual.service.impl;
 
 import com.grupo3.bibliotecavirtual.model.entity.Rol;
 import com.grupo3.bibliotecavirtual.model.entity.Usuario;
+import com.grupo3.bibliotecavirtual.model.enums.TipoRol;
 import com.grupo3.bibliotecavirtual.repository.RolRepository;
 import com.grupo3.bibliotecavirtual.repository.UsuarioRepository;
-import com.grupo3.bibliotecavirtual.security.RolNames;
 import com.grupo3.bibliotecavirtual.service.UsuarioService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -84,9 +84,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     private Rol obtenerRolPorDefecto() {
-        return rolRepository.findByDescripcion(RolNames.USUARIO)
+        return rolRepository.findByDescripcion(TipoRol.USUARIO)
                 .orElseThrow(() -> new RuntimeException(
-                        "Rol " + RolNames.USUARIO + " no encontrado. Reinicie la aplicación para inicializar roles."
+                        "Rol " + TipoRol.USUARIO + " no encontrado. Reinicie la aplicación para inicializar roles."
                 ));
     }
 

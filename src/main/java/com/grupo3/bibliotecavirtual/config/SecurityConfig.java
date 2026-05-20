@@ -23,7 +23,10 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/scalar/**"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/usuarios","/perfiles").permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/usuarios",
+                                "/perfiles/"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuarios").permitAll()
 
                         .requestMatchers(HttpMethod.GET,
@@ -36,7 +39,9 @@ public class SecurityConfig {
                                 "/api/estados",
                                 "/api/estados/**",
                                 "/roles",
-                                "/roles/**"
+                                "/roles/**",
+                                "/perfiles/**",
+                                "/prestamos/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/libros", "/api/libros/**").hasRole("ADMIN")
@@ -49,6 +54,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/usuarios", "/usuarios/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/roles", "/roles/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/roles", "/roles/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/perfiles/**").hasRole("USUARIO")
+                        .requestMatchers(HttpMethod.POST,"/perfiles/**").hasRole("USUARIO")
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
