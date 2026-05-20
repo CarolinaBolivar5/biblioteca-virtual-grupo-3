@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @Tag(name = "Préstamos", description = "Gestión de préstamos de libros")
 @RequestMapping("/prestamos")
-@CrossOrigin(origins = "http://localhost:5173")
 public class PrestamoController {
 
     private final PrestamoService service;
@@ -33,7 +32,6 @@ public class PrestamoController {
 
     @Operation(summary = "Listar préstamos por perfil")
     @GetMapping("/perfil/{perfilId}")
-    @CrossOrigin(origins = "http://localhost:5173")
     public ResponseEntity<List<Prestamo>> obtenerPorPerfil(@PathVariable Long perfilId) {
         System.out.println("Obteniendo préstamos para perfilId: " + perfilId);
         List<Prestamo> prestamos = service.obtenerPorPerfil(perfilId);

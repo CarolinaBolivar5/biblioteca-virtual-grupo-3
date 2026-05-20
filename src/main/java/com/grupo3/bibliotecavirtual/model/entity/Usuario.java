@@ -1,4 +1,5 @@
 package com.grupo3.bibliotecavirtual.model.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -13,6 +14,7 @@ public class Usuario extends BaseEntity {
 
     private String email;
 
+    @JsonIgnore
     private String password;
 
     @OneToOne(cascade = CascadeType.ALL)

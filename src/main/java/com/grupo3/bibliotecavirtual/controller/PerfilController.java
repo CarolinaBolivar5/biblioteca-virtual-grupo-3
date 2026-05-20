@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @Tag(name = "Perfiles", description = "Gestión de perfiles de usuarios")
 @RequestMapping("/perfiles")
-@CrossOrigin(origins = "http://localhost:5173")
 public class PerfilController {
 
     private final PerfilService service;
